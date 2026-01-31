@@ -1,0 +1,44 @@
+MDN Web Docs (documentación general)
+https://developer.mozilla.org
+
+Documentación oficial y didáctica sobre desarrollo web (HTTP, JS, APIs, navegador, etc.).
+
+MDN – Headers HTTP
+https://developer.mozilla.org/es/docs/Web/HTTP/Headers
+
+Lista completa de headers HTTP, qué hace cada uno y ejemplos de uso reales.
+
+MDN – Códigos de estado HTTP
+https://developer.mozilla.org/es/docs/Web/HTTP/Status
+
+Explicación de todos los códigos HTTP (200, 404, 500, etc.) y cuándo se usan.
+
+http.cat
+https://http.cat/
+
+Códigos de estado HTTP explicados de forma visual y fácil de recordar.
+
+httpbin
+https://httpbin.org/
+
+Herramienta para probar peticiones HTTP y ver headers y respuestas reales.
+
+httpbin – Ver headers
+https://httpbin.org/headers
+
+Muestra los headers que envía tu navegador en una petición real.
+
+httpbin – GET
+https://httpbin.org/get
+
+Ejemplo de una petición GET con todos sus datos y headers.
+
+httpbin – Response headers
+https://httpbin.org/response-headers?test=123
+
+Permite crear respuestas con headers personalizados para experimentar.
+
+RFC 9110 – Especificación oficial HTTP
+https://www.rfc-editor.org/rfc/rfc9110
+
+Documento técnico oficial que define cómo funciona HTTP (nivel experto).

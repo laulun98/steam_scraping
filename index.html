@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Steam Scraper</title></head>
+    <body>
+        <button id="btn">Cargar datos</button>
+        <pre id="output"></pre>
+    </body>
+</html>
+
+<script>
+    document.getElementById('btn').addEventListener('click', ()=>{
+        fetch('/steam')
+        .then(r=>r.json())
+        .then(data=>{
+            
+            let datos = JSON.stringify(data, null, 2)
+
+            data.friendslist.friends.forEach(friend => {
+                console.log(friend.steamid);
+            });
+
+            document.getElementById('output').textContent=datos
+            
+        })
+    })
+
+</script>
