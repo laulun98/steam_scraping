@@ -20,6 +20,13 @@ const server = createServer((req, res) => {
             res.setHeader("Content-Type", "application/json")
             res.end(JSON.stringify(data))
         })
+    } else if (req.url='/steam/more'){
+        fetch(`http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${API_KEY}&steamids=${STEAM_ID}`)
+        .then(r=>r.json()) //response es un objeto RESPONSE, response.json() -> lee el body y lo convierte a objeto, y devuelve otra promesa
+        .then(data=>{
+            res.setHeader("Content-Type", "application/json")
+            res.end(JSON.stringify(data))
+        })
     }
 /*
     if (req.url == '/') {
