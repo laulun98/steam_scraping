@@ -1,10 +1,23 @@
 <?php
-require 'config.php';
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
-$friendListUrl="http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=${API_KEY}&steamid=${STEAM_ID}&relationship=friend";
-$friendDataUrl="http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${API_KEY}&steamids=${STEAM_ID}";
+require_once 'config.php';
 
-$data = file_get_contents($friendListUrl);
+header('Content-Type: application/json');
 
-header("Content-Type: application/json");
-echo $data;
+$friendListUrl = "http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={$API_KEY}&steamid={$STEAM_ID}&relationship=friend";
+
+$response = file_get_contents($friendListUrl);
+
+if ($response === false) {
+    echo json_encode([
+        'error' => 'No se pudo obtener la lista de amigos'
+    ]);
+    exit;
+}
+
+$data = json_decode($response, true);
+
+echo json_encode($data);
+exit;

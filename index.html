@@ -6,7 +6,10 @@
         <div id="contenedor" style="display: flex; flex-direction: row;">
             <div id="steamIDs" style="display: flex; flex-direction: column;"></div>
             <div id="information" style="display: flex; flex-direction: row; margin:5px; padding:5px"></div>
-            <pre id="jason"></pre>
+            <div style="display: flex; flex-direction: column;">
+                <pre id="jason" style="max-width: 500px; white-space: pre-wrap; word-wrap: break-word"></pre>
+                <pre id="arbol"></pre>
+            </div>
         </div>
     </body>
 </html>
@@ -36,7 +39,7 @@
         boton.style.padding='3px'
         boton.innerHTML="STEAMID: "+id
         
-        document.getElementById('jason').textContent=JSON.stringify(data, null, 2) //, null, 2
+        document.getElementById('jason').textContent=JSON.stringify(data) //, null, 2
 
         let idDiv = document.getElementById('steamIDs')
         idDiv.appendChild(boton)
@@ -61,7 +64,8 @@
                 document.getElementById('jason').textContent=''
 
                 if(jugador.communityvisibilitystate==3){
-                    document.getElementById('jason').textContent=JSON.stringify(data, null, 2)
+                    document.getElementById('jason').textContent=JSON.stringify(data) //, null, 2
+                    document.getElementById('arbol').textContent=JSON.stringify(data, null, 2)
                     information.innerHTML=''
 
                     let contenedor=document.createElement('div')
