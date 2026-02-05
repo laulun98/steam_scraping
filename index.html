@@ -6,6 +6,7 @@
         <div id="contenedor" style="display: flex; flex-direction: row;">
             <div id="steamIDs" style="display: flex; flex-direction: column;"></div>
             <div id="information" style="display: flex; flex-direction: row; margin:5px; padding:5px"></div>
+            <pre id="jason"></pre>
         </div>
     </body>
 </html>
@@ -19,12 +20,12 @@
             let amigos = data.friendslist.friends
 
             for(let friend of amigos){
-                botonUsuario(friend)
+                botonUsuario(friend, data)
             }
         })
     })
 
-    function botonUsuario(friend){
+    function botonUsuario(friend, data){
         let id=friend.steamid
 
         let boton=document.createElement('div')
@@ -35,6 +36,8 @@
         boton.style.padding='3px'
         boton.innerHTML="STEAMID: "+id
         
+        document.getElementById('jason').textContent=JSON.stringify(data, null, 2) //, null, 2
+
         let idDiv = document.getElementById('steamIDs')
         idDiv.appendChild(boton)
         
@@ -55,8 +58,10 @@
                 const estado = jugador.personastate
                 const jugando = jugador.gameid
                 let nombreJuego=jugador.gameextrainfo
+                document.getElementById('jason').textContent=''
 
                 if(jugador.communityvisibilitystate==3){
+                    document.getElementById('jason').textContent=JSON.stringify(data, null, 2)
                     information.innerHTML=''
 
                     let contenedor=document.createElement('div')
