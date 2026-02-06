@@ -65,7 +65,10 @@
 
                 if(jugador.communityvisibilitystate==3){
                     document.getElementById('jason').textContent=JSON.stringify(data) //, null, 2
-                    document.getElementById('arbol').textContent=JSON.stringify(data, null, 2)
+                    let nodos = jsonToList(data)
+                    const arbolDiv = document.getElementById('arbol')
+                    arbolDiv.innerHTML = ''              // limpiar árbol anterior
+                    arbolDiv.appendChild(jsonToList(data)) // insertar árbol DOM
                     information.innerHTML=''
 
                     let contenedor=document.createElement('div')
@@ -136,5 +139,25 @@
         })
         
     } 
+
+    function jsonToList(data){
+    const ul = document.createElement('ul')
+
+    for (let key in data) {
+        const li = document.createElement('li')
+
+        if (typeof data[key] === 'object' && data[key] !== null) {
+            li.textContent = key
+            li.appendChild(jsonToList(data[key]))
+        } else {
+            li.textContent = `${key}: ${data[key]}`
+        }
+
+        ul.appendChild(li)
+    }
+
+    return ul
+}
+
 
 </script>
