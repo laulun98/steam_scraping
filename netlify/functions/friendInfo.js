@@ -24,4 +24,5 @@ exports.handler = async function (event, context) {
       body: JSON.stringify({ error: "Error fetching player info" })
     };
   }
+  /**/
 };
