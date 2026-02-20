@@ -11,7 +11,7 @@
 
 document.getElementById('btn').addEventListener('click', ()=>{
 
-    fetch("/.netlify/functions/friendList")
+    fetch("./netlify/functions/friendList")
     .then(r => r.json())
     .then(data => {
 
