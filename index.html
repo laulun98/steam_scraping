@@ -11,7 +11,7 @@
 
 document.getElementById('btn').addEventListener('click', ()=>{
 
-    fetch("/.netlify/functions/friendList.js")
+    fetch("/.netlify/functions/friendList")
     .then(r => r.json())
     .then(data => {
 
@@ -42,7 +42,7 @@ function botonUsuario(friend){
 
     boton.addEventListener('click', ()=>{
 
-        fetch("/.netlify/functions/friendInfo.js", {
+        fetch("/.netlify/functions/friendInfo", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
