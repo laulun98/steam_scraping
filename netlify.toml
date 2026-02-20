@@ -1,6 +1,0 @@
-[build]
-  functions = "netlify/functions"
-  publish = "."  # si tu index.html está en la raíz
-
-[build.environment]
-NODE_VERSION = "18"
