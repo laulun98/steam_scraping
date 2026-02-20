@@ -1,28 +1,28 @@
-exports.handler = async function (event, context) {
+// /api/friendList.js
+export default async function handler(req, res) {
+  // Solo permitimos POST (si quieres GET, se puede cambiar)
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
   const API_KEY = process.env.STEAM_API_KEY;
 
-  const { steamid } = JSON.parse(event.body);
-
-  const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${API_KEY}&steamids=${steamid}`;
-
   try {
+    // En Vercel, el body ya viene parseado si es JSON
+    const { steamid } = req.body;
+
+    if (!steamid) {
+      return res.status(400).json({ error: "steamid is required" });
+    }
+
+    const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${API_KEY}&steamids=${steamid}`;
+
     const response = await fetch(url);
     const data = await response.json();
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    };
-
+    return res.status(200).json(data);
   } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Error fetching player info" })
-    };
+    console.error(error);
+    return res.status(500).json({ error: "Error fetching player info" });
   }
-  /**/
-};
+}

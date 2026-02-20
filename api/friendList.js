@@ -1,4 +1,10 @@
-exports.handler = async function (event, context) {
+// /api/friendList.js
+export default async function handler(req, res) {
+  // Solo permitimos GET (puedes cambiarlo a POST si quieres)
+  if (req.method !== "GET") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
   const API_KEY = process.env.STEAM_API_KEY;
   const STEAM_ID = process.env.STEAM_ID;
 
@@ -6,10 +12,11 @@ exports.handler = async function (event, context) {
   console.log("STEAM_ID:", STEAM_ID);
 
   if (!API_KEY || !STEAM_ID) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Missing API_KEY or STEAM_ID", API_KEY, STEAM_ID })
-    };
+    return res.status(500).json({ 
+      error: "Missing API_KEY or STEAM_ID", 
+      API_KEY, 
+      STEAM_ID 
+    });
   }
 
   try {
@@ -17,15 +24,9 @@ exports.handler = async function (event, context) {
     const response = await fetch(url);
     const data = await response.json();
 
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    };
+    return res.status(200).json(data);
   } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err.message })
-    };
+    console.error(err);
+    return res.status(500).json({ error: err.message });
   }
-};
+}
