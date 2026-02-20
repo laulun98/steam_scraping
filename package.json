@@ -1,0 +1,23 @@
+{
+  "name": "steam_scraping",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laulun98/steam_scraping.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/laulun98/steam_scraping/issues"
+  },
+  "homepage": "https://github.com/laulun98/steam_scraping#readme",
+  "description": "",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
