@@ -1,163 +1,68 @@
 <!DOCTYPE html>
 <html>
-    <head><title>Steam Scraper</title></head>
-    <body>
-        <button id="btn">Cargar datos</button>
-        <div id="contenedor" style="display: flex; flex-direction: row;">
-            <div id="steamIDs" style="display: flex; flex-direction: column;"></div>
-            <div id="information" style="display: flex; flex-direction: row; margin:5px; padding:5px"></div>
-            <div style="display: flex; flex-direction: column;">
-                <pre id="jason" style="max-width: 500px; white-space: pre-wrap; word-wrap: break-word"></pre>
-                <pre id="arbol"></pre>
-            </div>
-        </div>
-    </body>
-</html>
+<head>
+    <title>Steam Scraper</title>
+</head>
+<body>
+    <button id="btn">Cargar datos</button>
+    <pre id="output"></pre>
 
 <script>
-    document.getElementById('btn').addEventListener('click', ()=>{
-        fetch("friendList.php")
-        .then(r=>r.json())
-        .then(data=>{
-            console.log(data)
-            let amigos = data.friendslist.friends
 
-            for(let friend of amigos){
-                botonUsuario(friend, data)
-            }
+document.getElementById('btn').addEventListener('click', ()=>{
+
+    fetch("/.netlify/functions/friendList")
+    .then(r => r.json())
+    .then(data => {
+
+        console.log(data)
+
+        data.friendslist.friends.forEach(friend => {
+            botonUsuario(friend)
+        });
+
+    })
+    .catch(err => console.error("Error:", err))
+
+})
+
+function botonUsuario(friend){
+
+    let id = friend.steamid
+
+    let boton = document.createElement('div')
+    boton.style.width = '150px'
+    boton.style.height = '20px'
+    boton.style.border = '1px solid black'
+    boton.style.margin = '5px'
+    boton.style.padding = '3px'
+    boton.innerHTML = id
+
+    document.body.appendChild(boton)
+
+    boton.addEventListener('click', ()=>{
+
+        fetch("/.netlify/functions/friendInfo", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ steamid: id })
         })
+        .then(r => r.json())
+        .then(data => {
+
+            let datos = JSON.stringify(data, null, 2)
+            document.getElementById('output').textContent = datos
+
+        })
+        .catch(err => console.error("Error:", err))
+
     })
 
-    function botonUsuario(friend, data){
-        let id=friend.steamid
-
-        let boton=document.createElement('div')
-        boton.style.width='150px'
-        boton.style.height='40px'
-        boton.style.border='1px solid black'
-        boton.style.margin='5px'
-        boton.style.padding='3px'
-        boton.innerHTML="STEAMID: "+id
-        
-        document.getElementById('jason').textContent=JSON.stringify(data) //, null, 2
-
-        let idDiv = document.getElementById('steamIDs')
-        idDiv.appendChild(boton)
-        
-        boton.addEventListener('click', ()=>{
-            //console.log('aaaa')
-
-            fetch("friendInfo.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: `steamid=${encodeURIComponent(id)}`
-            })
-            .then(r => r.json())
-            .then(data=>{
-                const jugador = data.response.players[0];
-                const conexion = new Date(jugador.lastlogoff * 1000).toLocaleString();
-                const estado = jugador.personastate
-                const jugando = jugador.gameid
-                let nombreJuego=jugador.gameextrainfo
-                document.getElementById('jason').textContent=''
-
-                if(jugador.communityvisibilitystate==3){
-                    document.getElementById('jason').textContent=JSON.stringify(data) //, null, 2
-                    let nodos = jsonToList(data)
-                    const arbolDiv = document.getElementById('arbol')
-                    arbolDiv.innerHTML = ''              // limpiar árbol anterior
-                    arbolDiv.appendChild(jsonToList(data)) // insertar árbol DOM
-                    information.innerHTML=''
-
-                    let contenedor=document.createElement('div')
-                    contenedor.style.display='flex'
-                    contenedor.style.flexDirection='row'
-                    information.appendChild(contenedor)
-
-                    let fotoPerfil=document.createElement('img')
-                    contenedor.appendChild(fotoPerfil)
-                    fotoPerfil.style.width='60px'
-                    fotoPerfil.style.height='120px'
-                    fotoPerfil.src=jugador.avatarfull
-                    fotoPerfil.style.width = '120px';
-                    fotoPerfil.style.display = 'block';
-
-                    let info=document.createElement('div')
-                    info.style.margin='8px'
-                    information.appendChild(info)
-
-                    let nombre=document.createElement('div')
-                    info.appendChild(nombre)
-                    nombre.innerHTML='USERNAME: '+jugador.personaname
-
-                    let ultimaConexion = document.createElement('div')
-                    info.appendChild(ultimaConexion)
-                    ultimaConexion.innerHTML="LAST CONNECTION: "+conexion
-
-                    let estadoPersonal = document.createElement('div')
-                    info.appendChild(estadoPersonal)
-                    let state = ""
-                    if(estado==0){
-                        state='Offline'
-                    } else if(estado==1){
-                        state='Online'
-                    } else if(estado==2){
-                        state='Ocupado'
-                    } else if(estado==3){
-                        state='Ausente'
-                    } else if(estado==4){
-                        state='Inactivo'
-                    } else if(estado==5){
-                        state='Buscando intercambio'
-                    } else if(estado==5){
-                        state='Buscando jugadores'
-                    } else {
-                        state='Desconocido'
-                    }
-                    estadoPersonal.innerHTML='ESTADO: '+state
-
-                    let estaJugando=document.createElement('div')
-                    info.appendChild(estaJugando)
-                    if(nombreJuego!=undefined || nombreJuego!=null){
-                        estaJugando.innerHTML='JUGANDO AHORA: SI'
-
-                        let juego=document.createElement('div')
-                        info.appendChild(juego)
-                        let nombreJuego=jugador.gameextrainfo
-                        juego.innerHTML='JUEGO: '+nombreJuego
-                    } else {
-                        estaJugando.innerHTML='JUGANDO AHORA: NO'
-                    }
-
-                } else {
-                    document.getElementById('information').textContent='Perfil privado'
-                }
-                
-            })
-        })
-        
-    } 
-
-    function jsonToList(data){
-    const ul = document.createElement('ul')
-
-    for (let key in data) {
-        const li = document.createElement('li')
-
-        if (typeof data[key] === 'object' && data[key] !== null) {
-            li.textContent = key
-            li.appendChild(jsonToList(data[key]))
-        } else {
-            li.textContent = `${key}: ${data[key]}`
-        }
-
-        ul.appendChild(li)
-    }
-
-    return ul
 }
 
-
 </script>
+
+</body>
+</html>
